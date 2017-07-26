@@ -362,6 +362,7 @@
 
     Template._loginButtonCheckCode.events({
         'click #login-buttons-catchode': function(event) {
+            event.stopPropagation();
             sendCode();
         }
     });
