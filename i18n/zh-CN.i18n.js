@@ -35,7 +35,8 @@ zhCN = {
 		create: "新建",
 		signIn: "登陆",
 		forgot: "忘记密码?",
-		createAcc: "新建用户"
+		createAcc: "新建用户",
+		catchCode: "点击获取验证码"
 	},
 	forgotPasswordForm: {
 		email: "Email",

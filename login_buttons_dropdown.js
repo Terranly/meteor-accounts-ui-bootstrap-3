@@ -357,8 +357,22 @@
 	});
 
 	//
-	// loginButtonsChangePassword template
+	// _loginButtonCheckCode template
 	//
+
+    Template._loginButtonCheckCode.events({
+        'click #login-buttons-catchode': function(event) {
+            sendCode();
+        }
+    });
+
+    Template._loginButtonCheckCode.helpers({
+
+    });
+
+    //
+    // loginButtonsChangePassword template
+    //
 	Template._loginButtonsChangePassword.events({
 		'keypress #login-old-password, keypress #login-password, keypress #login-password-again': function(event) {
 			if (event.keyCode === 13){
@@ -412,7 +426,7 @@
 	//
 	// helpers
 	//
-
+    var sms = {};
 	var elementValueById = function(id) {
 		var element = document.getElementById(id);
 		if (!element){
@@ -455,6 +469,23 @@
 		}
 	};
 
+	var sendCode = function () {
+        var phoneNumber = trimmedElementValueById('login-phone-number');
+        if(phoneNumber){
+        	var fullPhoneNumber = '+86' + phoneNumber;
+            var code = Meteor.requestPhoneVerificationCodeWithoutUser(fullPhoneNumber);
+            if(code){
+                sms.phone = phoneNumber;
+                sms.fullphonenumber = fullPhoneNumber;
+                sms.code = code;
+                console.log("Print code and phone when sending");
+                console.log(sms);
+            }
+		}else{
+        	alert("请输入手机号码");
+        	throw new Meteor.Error(403,"请输入手机号码");
+		}
+    }
 	var login = function() {
 		loginButtonsSession.resetMessages();
 
@@ -585,7 +616,28 @@
 		if (!(options.profile instanceof Object)){
 			options.profile = {};
 		}
+        var phoneNumber = trimmedElementValueById('login-phone-number');
+		if(phoneNumber){
+			options.profile.phonenumber = phoneNumber;
+		}else{
+			alert("请输入手机号");
+			throw new Meteor.Error(403,"请输入手机号");
+		}
+        var code = trimmedElementValueById('mobile_code');
+        if (code && code == sms.code) {
+            options.profile.phoneCode = code;
+        }else{
+        	throw new Meteor.Error(403,"验证码验证失败");
+		}
+        if (email !== null) {
+            if (!Accounts._loginButtons.validateEmail(email)){
+                return;
+            } else {
+                options.email = email;
+            }
+        }
 
+        options.profile.display_picture = "images/head_common.png";
 		// define a proxy function to allow extraSignupFields set error messages
 		var errorFunction = function(errorMessage) {
 			Accounts._loginButtonsSession.errorMessage(errorMessage);

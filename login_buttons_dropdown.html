@@ -80,6 +80,9 @@
 		{{#each fields}}
 			{{> _loginButtonsFormField}}
 		{{/each}}
+        {{#if inSignupFlow}}
+           {{> _loginButtonCheckCode}}
+        {{/if}}
 		<button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-password" type="button">
 			{{#if inSignupFlow}}
 				{{i18n 'loginButtonsLoggedOutPasswordService.create'}}
@@ -102,6 +105,15 @@
 		{{/if}}
 	{{/if}}
 </template>
+
+<!--<template name="_loginButtonsLoggedOutPasswordService">-->
+        <!--{{#if inLoginFlow}}-->
+            <!--{{> Login}}-->
+        <!--{{/if}}-->
+        <!--{{#if inSignupFlow}}-->
+            <!--{{> Register}}-->
+        <!--{{/if}}-->
+<!--</template>-->
 
 <template name="_forgotPasswordForm">
 	<div class="login-form">
@@ -173,3 +185,9 @@
 	<button class="btn btn-block btn-default" id="login-buttons-cancel-change-password">{{i18n 'loginButtonsChangePassword.cancel'}}</button>
 </template>
 
+<template name="_loginButtonCheckCode">
+    <button class="btn btn-primary col-xs-12 col-sm-12" id="login-buttons-catchode" type="button">
+        {{i18n 'loginButtonsLoggedOutPasswordService.catchCode'}}
+    </button>
+    <input class="form-control" type="text" id="mobile_code" placeholder="输入验证码">
+</template>
